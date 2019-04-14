@@ -8,10 +8,8 @@ Advantages:
 You can get peer review of a package by examining the diffs between versions
 of your Makefile. No more wading through a zillion annoying GUI panes.
 
-Full documentation can be found at http://wiki.github.com/unixorn/luggage/
+Full documentation can be found at https://github.com/unixorn/luggage/wiki
 
 Example packages can be found at https://github.com/unixorn/luggage-examples
 
 Note : This version adds a command line option to remove the application prior to installation (app2luggage.rb).
-
-

@@ -14,14 +14,15 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
-#   Additional modifications contributed by the following people in no particular order : 
+#   Additional modifications contributed by the following people in no particular order :
 #    -  Henri Shustak
 #
-#   Version History : 
+#   Version History :
 #       v1.0 - Initial release.
 #       v1.1 - Added an option which provides automatic removal of the appliaction prior to installation.
 #       v1.2 - Minor bug fix relating to working directories which contain spaces.
 #       v1.3 - Added an option which when enabled will instruct the installer to not install if the application is found on target system.
+#       v1.4 - Updated references of trollop to optimist (new name)
 #
 #   Minor bug fix relating to directories which contain spaces added by Henri Shustak 2011
 #
@@ -31,10 +32,10 @@ require 'ftools'
 require 'rubygems'
 
 begin
-  require 'trollop'
+  require 'optimist'
 rescue LoadError
-  puts "app2luggage.rb requires the trollop gem"
-  puts "do 'sudo gem install trollop' and try again."
+  puts "app2luggage.rb requires the optimist gem"
+  puts "do 'sudo gem install optimist' and try again."
   exit 1
 end
 
@@ -72,10 +73,10 @@ end
 
 def generatePreflight()
     if $opts[:remove_exisiting_version] then
-        
+
         rawPreflight =<<"END_PREFLIGHT"
 #!/usr/bin/env bash
-# Automatically generated preflight script to remove 
+# Automatically generated preflight script to remove
 # the application prior to installation of with this
 # package.
 if [ -e "$3/Applications/#{$installed_app}" ] ; then
@@ -152,7 +153,7 @@ def bundleApplication()
   `bzip2 -9v "#{scratch_tarball}"`
 end
 
-$opts = Trollop::options do
+$opts = Optimist::options do
   version "app2luggage 0.1 (c) 2010 Joe Block"
   banner <<-EOS
 Automagically wrap an Application into a tar.bz2 and spew out a Luggage-compatible Makefile.
@@ -177,12 +178,12 @@ EOS
 end
 
 # Sanity check args
-Trollop::die :application, "#{$opts[:application]} must exist" unless File.exist?($opts[:application]) if $opts[:application]
-Trollop::die :application, "must specify an application to package" if $opts[:application] == nil
-Trollop::die :luggage_path, "#{$opts[:luggage_path]} doesn't exist" unless File.exist?($opts[:luggage_path]) if $opts[:luggage_path]
-Trollop::die :package_id, "must specify a package id" if $opts[:package_id] == nil
-Trollop::die :reverse_domain, "must specify a reversed domain" if $opts[:reverse_domain] == nil
-Trollop::die :remove_exisiting_version, "and argument no-overwrite are incompatible with each other" if ($opts[:no_overwrite] == true && $opts[:remove_exisiting_version] == true)
+Optimist::die :application, "#{$opts[:application]} must exist" unless File.exist?($opts[:application]) if $opts[:application]
+Optimist::die :application, "must specify an application to package" if $opts[:application] == nil
+Optimist::die :luggage_path, "#{$opts[:luggage_path]} doesn't exist" unless File.exist?($opts[:luggage_path]) if $opts[:luggage_path]
+Optimist::die :package_id, "must specify a package id" if $opts[:package_id] == nil
+Optimist::die :reverse_domain, "must specify a reversed domain" if $opts[:reverse_domain] == nil
+Optimist::die :remove_exisiting_version, "and argument no-overwrite are incompatible with each other" if ($opts[:no_overwrite] == true && $opts[:remove_exisiting_version] == true)
 
 $build_date = `date -u "+%Y-%m-%d"`.chomp
 $app_name = clean_name(File.basename($opts[:application]))
